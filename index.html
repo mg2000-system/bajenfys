@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fysträning</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap');
+
+  :root {
+    --orange: #3f8f5c;
+    --orange-light: #5fc77d;
+    --orange-dark: #1b4332;
+    --yellow: #f4c94a;
+    --white: #ffffff;
+    --gray: #8fa396;
+    --dark: #0b0f0c;
+    --bench: #1b3226;
+    --card-bg: #14241c;
+    --border: #2a4c3a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--dark);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 0 0 60px 0;
+  }
+
+  header {
+    background: var(--orange-dark);
+    border-bottom: 3px solid var(--orange-light);
+    padding: 16px 20px;
+    text-align: center;
+  }
+
+  header h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--yellow);
+    text-transform: uppercase;
+  }
+
+  header p {
+    color: var(--white);
+    font-size: 0.85rem;
+    margin-top: 2px;
+  }
+
+  .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
+
+  .view-hidden { display: none; }
+
+  .page-heading {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--white);
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .card h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--yellow);
+    margin-bottom: 6px;
+  }
+
+  /* LIST-STYLE OPTION CARDS */
+  .pass-card {
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+
+  .pass-card:hover { border-color: var(--orange-light); }
+
+  .pass-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--white);
+    letter-spacing: 0.5px;
+  }
+
+  .pass-card .meta {
+    font-size: 0.82rem;
+    color: var(--gray);
+    margin-top: 4px;
+  }
+
+  /* INFO BANNER */
+  .info-banner {
+    background: var(--bench);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: var(--white);
+    margin-bottom: 16px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .location-tag {
+    font-size: 0.78rem;
+    color: var(--gray);
+    margin-bottom: 14px;
+  }
+
+  /* PICK CARDS (strength selector) */
+  .pick-card { position: relative; }
+
+  .pick-card.selected {
+    border-color: var(--orange-light);
+    background: rgba(95, 199, 125, 0.12);
+  }
+
+  .pick-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    color: var(--orange-light);
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+
+  /* CATEGORY TABS */
+  .tab-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .tab-btn {
+    flex: 1;
+    text-align: center;
+    padding: 10px 6px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: var(--bench);
+    color: var(--gray);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .tab-btn:hover { border-color: var(--orange-light); }
+
+  .tab-btn.active {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: #fff;
+  }
+
+  .pass-card.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 13px 28px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-primary {
+    background: var(--orange);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--orange-light); transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    border: 2px solid var(--border);
+    color: var(--gray);
+    font-size: 0.9rem;
+    padding: 10px 20px;
+  }
+  .btn-secondary:hover { border-color: var(--orange-light); color: var(--white); }
+
+  .btn-block { width: 100%; margin-top: 8px; }
+
+  /* EXERCISE LIST */
+  .exercise-list { list-style: none; }
+
+  .exercise-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 12px;
+    background: var(--bench);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+
+  .exercise-index {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--orange-dark);
+    color: var(--orange-light);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .exercise-name {
+    flex: 1;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  /* PART HEADING */
+  .part-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--orange-light);
+    margin-bottom: 4px;
+  }
+
+  /* INTERVAL BLOCK */
+  .interval-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .interval-tile {
+    background: var(--bench);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 6px;
+    text-align: center;
+  }
+
+  .interval-tile .val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--yellow);
+    line-height: 1;
+  }
+
+  .interval-tile .lbl {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gray);
+    margin-top: 4px;
+  }
+
+  .rest-note {
+    background: rgba(244,201,74,0.1);
+    border: 1px solid rgba(244,201,74,0.3);
+    color: var(--yellow);
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 10px 14px;
+    border-radius: 8px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Onsdagsfys med Marco &amp; Simon</h1>
+</header>
+
+<!-- SCREEN 1: BUILD -->
+<div class="container screen" id="screenBuild">
+  <div class="card">
+    <h2>1. Styrkedel</h2>
+    <div id="strengthPicker"></div>
+  </div>
+
+  <div class="card">
+    <h2>2. Kategori</h2>
+    <div class="tab-bar" id="categoryTabs"></div>
+    <div class="info-banner" id="strengthRequiredNote" style="display:none;">Välj en styrkedel ovan för att se passen</div>
+    <div id="variantList"></div>
+  </div>
+</div>
+
+<!-- SCREEN 2: COMBINED PASS -->
+<div class="container screen view-hidden" id="screenPass">
+  <button class="btn btn-secondary" id="backToBuildBtn" style="margin-bottom:14px;">← Tillbaka</button>
+  <div class="page-heading" id="passTitle"></div>
+  <div class="info-banner" id="passTotalTime"></div>
+  <div id="partsContainer"></div>
+</div>
+
+<script>
+// ---- DATA (från "FYS SIMON MARCO 26/27") ----
+
+const STRENGTH_OPTIONS = [
+  {
+    id: 'a', label: 'A', name: 'Ben/Core Dynamisk', type: 'circuit',
+    durationMin: 15, location: 'Konstgräset eller inomhus', note: 'Max antal varv på 15 min',
+    items: [
+      '10 knäböj', '6 utfallssteg', '10 situps', '10 höftlyft', '6 enbensknäböj',
+      '10 fällkniv', '6 utfallssteg', '6 höftlyft', '10 rygglyft',
+    ],
+  },
+  {
+    id: 'b', label: 'B', name: 'Ben/Core Statisk', type: 'circuit',
+    durationMin: 15, location: 'Konstgräset eller inomhus', note: null,
+    items: [
+      'Plankan 3x1 min', 'Jägarvila 3x1 min', 'Sidoplanka 3x30 sek per sida',
+      'Stå i djup knäböj 3x1 min', 'Stå i djup enbensknäböj 3x30 sek per ben',
+    ],
+  },
+  {
+    id: 'c', label: 'C', name: 'Överkropp', type: 'circuit',
+    durationMin: 15, location: 'Konstgräset eller inomhus', note: 'Max antal varv på 15 min',
+    items: [
+      '10 dips', '10 breda armhävningar', '10 rygglyft', '10 plankgång',
+      '10 smala armhävningar', '10 fällkniv', '10 armhävningar', '10 rygglyft',
+    ],
+  },
+];
+
+const CATEGORIES = [
+  {
+    id: 'kondition', name: 'Kondition',
+    variants: [
+      {
+        id: 'a', label: 'A', name: 'Korta Intervaller', type: 'interval',
+        durationMin: 12, location: 'Konstgräset',
+        exerciseName: 'Maxlöp', sets: 2, reps: 10, workSec: 15, restSec: 15,
+        restNote: 'Vila 2 min mellan seten',
+      },
+      {
+        id: 'b', label: 'B', name: 'Långa Intervaller', type: 'interval',
+        durationMin: 17, location: 'Konstgräset',
+        exerciseName: 'Arbete', sets: 6, reps: null, workSec: 120, restSec: 60,
+        restNote: null,
+      },
+      {
+        id: 'c', label: 'C', name: 'Hoppa!', type: 'circuit',
+        durationMin: 15, location: 'Konstgräset eller inomhus', note: 'Max antal varv på 15 min',
+        items: [
+          '30 x-hopp', '10 armhävningar', '10 upphopp', '20 höga knän',
+          '10 burpees', '20 spark i rumpan', '10 knäböjshopp',
+        ],
+      },
+      {
+        id: 'd', label: 'D', name: 'Trappträning', type: 'circuit',
+        durationMin: 10, location: 'Rackarbacken eller läktaren inne', note: null,
+        items: ['Trappträning (gå ner för trappan som vila)'],
+      },
+    ],
+  },
+  {
+    id: 'spanst', name: 'Spänst',
+    variants: [
+      {
+        id: 'a', label: 'A', name: 'Mångsteg', type: 'circuit',
+        durationMin: 12, location: 'Rackarbacken', note: null,
+        items: [
+          'Mångsteg backe 6x50m (vila = gå ner för backen)',
+          'Vristhopp 4x30s (30s vila, hög frekvens)',
+        ],
+      },
+      {
+        id: 'b', label: 'B', name: 'Hopprep', type: 'circuit',
+        durationMin: 12, location: 'Konstgräset', note: '5 x maxantal dubbelhopp man klarar',
+        items: ['Hopprep 5x2 min (1 min vila)'],
+      },
+      {
+        id: 'c', label: 'C', name: 'Enbenshopp + Box Jump', type: 'circuit',
+        durationMin: 10, location: 'Konstgräset', note: null,
+        items: ['Enbenshopp 6x30 m/ben', 'Hoppa upp på något högt 4x8'],
+      },
+      {
+        id: 'd', label: 'D', name: 'Hoppa!', type: 'circuit',
+        durationMin: 12, location: 'Konstgräset', note: null,
+        items: ['Vristhopp 4x30s', 'Mångsteg 4x30m', 'Enbenshopp 4x30m/ben'],
+      },
+    ],
+  },
+  {
+    id: 'snabbhet', name: 'Snabbhet',
+    variants: [
+      {
+        id: 'a', label: 'A', name: 'Maxrusch', type: 'circuit',
+        durationMin: 10, location: 'Konstgräset', note: null,
+        items: [
+          '6x20m max rusch',
+          'Fyrkant 3 ggr åt höger håll 3 ggr åt vänster (5x5 m)',
+          'Snabba fötter över linje 5x20 sek',
+        ],
+      },
+      {
+        id: 'b', label: 'B', name: 'Jämfotahopp', type: 'circuit',
+        durationMin: 10, location: 'Konstgräset/Rackarbacken', note: null,
+        items: ['Små jämfotahopp framåt 20m', 'Små jämfotahopp 2-1 20m', '6x trappa'],
+      },
+      {
+        id: 'c', label: 'C', name: 'Liggande Start', type: 'circuit',
+        durationMin: 12, location: 'Konstgräset', note: null,
+        items: [
+          'Liggande start rygg + högt upphopp 6x10m',
+          'Liggande start mage + högt upphopp 6x10m',
+          '3x8 hoppa ner från platform och hoppa upp så fort som möjligt',
+        ],
+      },
+    ],
+  },
+];
+
+let currentStrengthId = null;
+let currentCategoryTab = CATEGORIES[0].id;
+
+// ---- SCREEN SWITCHING ----
+function setScreen(id) {
+  document.querySelectorAll('.screen').forEach(el => el.classList.add('view-hidden'));
+  document.getElementById(id).classList.remove('view-hidden');
+  window.scrollTo(0, 0);
+}
+
+// ---- SCREEN 1: BUILD (strength picker + category tabs + variants) ----
+function initBuildScreen() {
+  renderStrengthPicker();
+  renderCategoryTabs();
+  renderVariantList();
+  setScreen('screenBuild');
+}
+
+function renderStrengthPicker() {
+  const cont = document.getElementById('strengthPicker');
+  cont.innerHTML = '';
+  STRENGTH_OPTIONS.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'pass-card pick-card' + (currentStrengthId === s.id ? ' selected' : '');
+    card.onclick = () => selectStrength(s.id);
+    card.innerHTML = `<h3>${s.name}</h3><div class="meta">${s.durationMin} min</div>`;
+    cont.appendChild(card);
+  });
+}
+
+function selectStrength(id) {
+  currentStrengthId = id;
+  renderStrengthPicker();
+  renderVariantList();
+}
+
+function renderCategoryTabs() {
+  const cont = document.getElementById('categoryTabs');
+  cont.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const btn = document.createElement('div');
+    btn.className = 'tab-btn' + (currentCategoryTab === cat.id ? ' active' : '');
+    btn.textContent = cat.name;
+    btn.onclick = () => selectCategoryTab(cat.id);
+    cont.appendChild(btn);
+  });
+}
+
+function selectCategoryTab(id) {
+  currentCategoryTab = id;
+  renderCategoryTabs();
+  renderVariantList();
+}
+
+function renderVariantList() {
+  const cat = CATEGORIES.find(c => c.id === currentCategoryTab);
+  const strength = STRENGTH_OPTIONS.find(s => s.id === currentStrengthId);
+
+  document.getElementById('strengthRequiredNote').style.display = strength ? 'none' : '';
+
+  const cont = document.getElementById('variantList');
+  cont.innerHTML = '';
+  cat.variants.forEach(v => {
+    const card = document.createElement('div');
+    card.className = 'pass-card' + (!strength ? ' disabled' : '');
+    if (strength) card.onclick = () => showPass(strength.id, cat.id, v.id);
+    const metaText = strength
+      ? `${v.durationMin} min · totalt ca ${strength.durationMin + v.durationMin} min`
+      : `${v.durationMin} min`;
+    card.innerHTML = `<h3>${v.name}</h3><div class="meta">${metaText}</div>`;
+    cont.appendChild(card);
+  });
+}
+
+// ---- SCREEN 2: COMBINED PASS ----
+function showPass(strengthId, categoryId, variantId) {
+  const strength = STRENGTH_OPTIONS.find(s => s.id === strengthId);
+  const cat = CATEGORIES.find(c => c.id === categoryId);
+  const variant = cat.variants.find(v => v.id === variantId);
+
+  document.getElementById('passTitle').textContent = `${strength.name} + ${variant.name}`;
+  const total = strength.durationMin + variant.durationMin;
+  document.getElementById('passTotalTime').textContent = `Totalt ca ${total} min`;
+  document.getElementById('backToBuildBtn').onclick = () => initBuildScreen();
+
+  const cont = document.getElementById('partsContainer');
+  cont.innerHTML = '';
+  cont.appendChild(buildPartCard(strength, 1));
+  cont.appendChild(buildPartCard(variant, 2));
+
+  setScreen('screenPass');
+}
+
+function buildPartCard(part, partIndex) {
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const header = document.createElement('div');
+  header.innerHTML = `
+    <div class="part-label">Del ${partIndex}</div>
+    <h2>${part.name}</h2>
+    <div class="location-tag">📍 ${part.location}</div>
+    ${part.note ? `<div class="info-banner">${part.note}</div>` : ''}`;
+  card.appendChild(header);
+
+  if (part.type === 'circuit') {
+    const list = document.createElement('ul');
+    list.className = 'exercise-list';
+    part.items.forEach((text, idx) => {
+      const li = document.createElement('li');
+      li.className = 'exercise-row';
+      li.innerHTML = `
+        <div class="exercise-index">${idx + 1}</div>
+        <div class="exercise-name">${text}</div>`;
+      list.appendChild(li);
+    });
+    card.appendChild(list);
+  } else if (part.type === 'interval') {
+    card.appendChild(buildIntervalBody(part));
+  }
+
+  return card;
+}
+
+function buildIntervalBody(part) {
+  const wrap = document.createElement('div');
+  const tiles = [`<div class="interval-tile"><div class="val">${part.sets}</div><div class="lbl">Set</div></div>`];
+  if (part.reps) {
+    tiles.push(`<div class="interval-tile"><div class="val">${part.reps}</div><div class="lbl">Reps</div></div>`);
+  }
+  tiles.push(`<div class="interval-tile"><div class="val">${formatSec(part.workSec)}</div><div class="lbl">${part.exerciseName}</div></div>`);
+  tiles.push(`<div class="interval-tile"><div class="val">${formatSec(part.restSec)}</div><div class="lbl">Vila</div></div>`);
+
+  wrap.innerHTML = `<div class="interval-grid">${tiles.join('')}</div>`
+    + (part.restNote ? `<div class="rest-note">⏱ ${part.restNote}</div>` : '');
+  return wrap;
+}
+
+function formatSec(sec) {
+  if (sec >= 60 && sec % 60 === 0) return `${sec / 60} min`;
+  return `${sec}s`;
+}
+
+// ---- INIT ----
+initBuildScreen();
+</script>
+</body>
+</html>
