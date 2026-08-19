@@ -53,6 +53,16 @@
     margin-top: 2px;
   }
 
+  .app-intro {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 16px 20px 0;
+    color: var(--gray);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
   .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
 
   .view-hidden { display: none; }
@@ -316,16 +326,17 @@
 <header>
   <h1>Fys med Marco &amp; Simon</h1>
 </header>
+<p class="app-intro">Passen består i regel av två delar, en del fokus på styrka följt av ett kortare pass fokus på kondition, spänst eller snabbhet.</p>
 
 <!-- SCREEN 1: BUILD -->
 <div class="container screen" id="screenBuild">
   <div class="card">
-    <h2>1. Styrkedel</h2>
+    <h2>Del 1 - Styrka</h2>
     <div id="strengthPicker"></div>
   </div>
 
   <div class="card">
-    <h2>2. Kategori</h2>
+    <h2>Del 2 - Kondition, Spänst eller Snabbhet</h2>
     <div class="tab-bar" id="categoryTabs"></div>
     <div class="info-banner" id="strengthRequiredNote" style="display:none;">Välj en styrkedel ovan för att se passen</div>
     <div id="variantList"></div>
