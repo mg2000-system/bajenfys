@@ -53,6 +53,29 @@
     margin-top: 2px;
   }
 
+  .info-tooltip {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: calc(100% - 32px);
+    max-width: 668px;
+    margin: 16px auto 0;
+    padding: 12px 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--yellow);
+    border-radius: 8px;
+    color: var(--gray);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .info-tooltip .icon {
+    font-size: 1.05rem;
+    line-height: 1.4;
+    flex-shrink: 0;
+  }
+
   .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
 
   .view-hidden { display: none; }
@@ -316,6 +339,11 @@
 <header>
   <h1>Fys med Marco &amp; Simon</h1>
 </header>
+
+<div class="info-tooltip">
+  <span class="icon">💡</span>
+  <span>Passet du sätter ihop kommer att bestå av två delar. Ett styrkepass, följt av ett kortare kondition, spänst eller snabbhetspass.</span>
+</div>
 
 <!-- SCREEN 1: BUILD -->
 <div class="container screen" id="screenBuild">
