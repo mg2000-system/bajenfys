@@ -356,6 +356,8 @@
     <div class="info-banner" id="strengthRequiredNote" style="display:none;">Välj en styrkedel ovan för att se passen</div>
     <div id="variantList"></div>
   </div>
+
+  <button class="btn btn-secondary btn-block" onclick="showEmergencyList()">⚠️ Allt skiter sig</button>
 </div>
 
 <!-- SCREEN 2: COMBINED PASS -->
@@ -364,6 +366,20 @@
   <div class="page-heading" id="passTitle"></div>
   <div class="info-banner" id="passTotalTime"></div>
   <div id="partsContainer"></div>
+</div>
+
+<!-- SCREEN 3: EMERGENCY PASS LIST -->
+<div class="container screen view-hidden" id="screenEmergencyList">
+  <button class="btn btn-secondary" onclick="initBuildScreen()" style="margin-bottom:14px;">← Tillbaka</button>
+  <div class="page-heading">Allt skiter sig</div>
+  <div class="info-banner">Enkla engångspass för när något oplanerat händer &mdash; tidsnöd, dåligt väder eller annat som stökar till planerna.</div>
+  <div id="emergencyList"></div>
+</div>
+
+<!-- SCREEN 4: EMERGENCY PASS DETAIL -->
+<div class="container screen view-hidden" id="screenEmergencyPass">
+  <button class="btn btn-secondary" onclick="showEmergencyList()" style="margin-bottom:14px;">← Tillbaka</button>
+  <div id="emergencyPartsContainer"></div>
 </div>
 
 <script>
@@ -485,6 +501,17 @@ const CATEGORIES = [
   },
 ];
 
+const EMERGENCY_PASSES = [
+  {
+    id: '480', name: '480-passet', type: 'circuit',
+    note: '60 reps av varje övning',
+    items: [
+      '60 armhävningar', '60 tåhävningar', '60 burpees', '60 mountain climbers',
+      '60 utfall med rotation', '60 benböj', '60 rygglyft', '60 dead bugs',
+    ],
+  },
+];
+
 let currentStrengthId = null;
 let currentCategoryTab = CATEGORIES[0].id;
 
@@ -578,15 +605,39 @@ function showPass(strengthId, categoryId, variantId) {
   setScreen('screenPass');
 }
 
+// ---- SCREEN 3/4: EMERGENCY PASSES ----
+function showEmergencyList() {
+  const cont = document.getElementById('emergencyList');
+  cont.innerHTML = '';
+  EMERGENCY_PASSES.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'pass-card';
+    card.onclick = () => showEmergencyPass(p.id);
+    card.innerHTML = `<h3>${p.name}</h3>${p.note ? `<div class="meta">${p.note}</div>` : ''}`;
+    cont.appendChild(card);
+  });
+  setScreen('screenEmergencyList');
+}
+
+function showEmergencyPass(id) {
+  const pass = EMERGENCY_PASSES.find(p => p.id === id);
+
+  const cont = document.getElementById('emergencyPartsContainer');
+  cont.innerHTML = '';
+  cont.appendChild(buildPartCard(pass));
+
+  setScreen('screenEmergencyPass');
+}
+
 function buildPartCard(part, partIndex) {
   const card = document.createElement('div');
   card.className = 'card';
 
   const header = document.createElement('div');
   header.innerHTML = `
-    <div class="part-label">Del ${partIndex}</div>
+    ${partIndex ? `<div class="part-label">Del ${partIndex}</div>` : ''}
     <h2>${part.name}</h2>
-    <div class="location-tag">📍 ${part.location}</div>
+    ${part.location ? `<div class="location-tag">📍 ${part.location}</div>` : ''}
     ${part.note ? `<div class="info-banner">${part.note}</div>` : ''}`;
   card.appendChild(header);
 
