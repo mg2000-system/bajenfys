@@ -504,10 +504,18 @@ const CATEGORIES = [
 const EMERGENCY_PASSES = [
   {
     id: '480', name: '480-passet', type: 'circuit',
-    note: '60 reps av varje övning',
+    durationMin: 30, note: '60 reps av varje övning',
     items: [
       '60 armhävningar', '60 tåhävningar', '60 burpees', '60 mountain climbers',
       '60 utfall med rotation', '60 benböj', '60 rygglyft', '60 dead bugs',
+    ],
+  },
+  {
+    id: '8-stationer', name: '8 Stationer', type: 'circuit',
+    durationMin: 32, note: '90 sek per station, 30 sek vila mellan varje station. 2 varv totalt',
+    items: [
+      'Burpees', 'Korsövning', 'Situps', '20/10/20',
+      'Rygglyft', 'Knäböjshopp', 'Armhävningar', 'Pogo Jumps',
     ],
   },
 ];
@@ -613,7 +621,10 @@ function showEmergencyList() {
     const card = document.createElement('div');
     card.className = 'pass-card';
     card.onclick = () => showEmergencyPass(p.id);
-    card.innerHTML = `<h3>${p.name}</h3>${p.note ? `<div class="meta">${p.note}</div>` : ''}`;
+    const metaBits = [];
+    if (p.durationMin) metaBits.push(`${p.durationMin} min`);
+    if (p.note) metaBits.push(p.note);
+    card.innerHTML = `<h3>${p.name}</h3><div class="meta">${metaBits.join(' · ')}</div>`;
     cont.appendChild(card);
   });
   setScreen('screenEmergencyList');
