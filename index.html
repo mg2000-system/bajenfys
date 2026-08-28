@@ -74,6 +74,25 @@
     flex-shrink: 0;
   }
 
+  .spotify-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--white);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: border-color 0.15s;
+  }
+
+  .spotify-link:hover { border-color: var(--orange-light); }
+
   .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
 
   .view-hidden { display: none; }
@@ -358,6 +377,8 @@
   </div>
 
   <button class="btn btn-secondary btn-block" onclick="showEmergencyList()" style="font-size:1.4rem;">⚠️ Allt skiter sig</button>
+
+  <a class="spotify-link" href="https://open.spotify.com/playlist/5qhK4p665VKTNXfzxiXS5V?si=372127730431494a&pt=7427ef947bab2c85d0b3a882dca1f8fe" target="_blank" rel="noopener noreferrer">🎵 Träningslåtar på Spotify</a>
 </div>
 
 <!-- SCREEN 2: COMBINED PASS -->
@@ -390,8 +411,8 @@ const STRENGTH_OPTIONS = [
     id: 'a', label: 'A', name: 'Ben/Core Dynamisk', type: 'circuit',
     durationMin: 15, location: 'Konstgräset eller inomhus', note: 'Max antal varv på 15 min',
     items: [
-      '10 Knäböj', '6 Utfallssteg', '10 Situps', '10 Höftlyft', '6 Enbensknäböj',
-      '10 Fällkniv', '6 Utfallssteg', '6 Höftlyft', '10 Rygglyft',
+      '10 Knäböj', '6 Utfallssteg / ben', '10 Situps', '10 Höftlyft', '6 Pistol Squats',
+      '10 Fällkniv', '6 Utfallssteg / ben', '6 Höftlyft', '10 Rygglyft',
     ],
   },
   {
